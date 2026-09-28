@@ -1,0 +1,127 @@
+[2026-09-28 18:49:50] ===== KIJANIKIOSK PROVISIONING START =====
+[2026-09-28 18:49:50] Host: DESKTOP-5R3D7HL
+[2026-09-28 18:49:50] Date: Mon Sep 28 18:49:50 EAT 2026
+[2026-09-28 18:49:50] PHASE 1: Preflight and dirty-state handling
+[2026-09-28 18:49:50] DIRTY STATE: kk-api already exists; preserving account.
+[2026-09-28 18:49:50] DIRTY STATE: kk-payments already exists; preserving account.
+[2026-09-28 18:49:50] DIRTY STATE: kk-logs already exists; preserving account.
+[2026-09-28 18:49:50] kijanikiosk group already exists; preserving it.
+[2026-09-28 18:49:50] PHASE 1 complete
+[2026-09-28 18:49:50] PHASE 2: Packages and configuration
+[2026-09-28 18:49:50] Package already installed: acl
+[2026-09-28 18:49:50] Package already installed: curl
+[2026-09-28 18:49:50] Package already installed: jq
+[2026-09-28 18:49:50] Package already installed: logrotate
+[2026-09-28 18:49:50] Package already installed: nginx
+[2026-09-28 18:49:50] Package already installed: ufw
+[2026-09-28 18:49:50] Package installation and verification complete.
+[2026-09-28 18:49:50] PHASE 2 complete
+[2026-09-28 18:49:50] PHASE 3: Users, directories, permissions and ACLs
+[2026-09-28 18:49:50] Access model applied.
+[2026-09-28 18:49:50] Access verification passed.
+[2026-09-28 18:49:50] PHASE 3 complete
+[2026-09-28 18:49:50] PHASE 4: Creating hardened systemd services
+[2026-09-28 18:49:50] DIRTY STATE: existing kk-api.service detected; replacing with managed unit.
+[2026-09-28 18:49:50] DIRTY STATE: existing kk-payments.service detected; replacing with managed unit.
+[2026-09-28 18:49:50] DIRTY STATE: existing kk-logs.service detected; replacing with managed unit.
+[2026-09-28 18:49:52] All three systemd services started successfully.
+[2026-09-28 18:49:52] systemd security scores:
+→ Overall exposure level for kk-api.service: 2.7 OK 🙂
+→ Overall exposure level for kk-payments.service: 1.1 OK 🙂
+→ Overall exposure level for kk-logs.service: 2.7 OK 🙂
+[2026-09-28 18:49:52] PHASE 4 complete
+[2026-09-28 18:49:52] PHASE 5: Resetting and configuring UFW
+Backing up 'user.rules' to '/etc/ufw/user.rules.20260928_184953'
+Backing up 'before.rules' to '/etc/ufw/before.rules.20260928_184953'
+Backing up 'after.rules' to '/etc/ufw/after.rules.20260928_184953'
+Backing up 'user6.rules' to '/etc/ufw/user6.rules.20260928_184953'
+Backing up 'before6.rules' to '/etc/ufw/before6.rules.20260928_184953'
+Backing up 'after6.rules' to '/etc/ufw/after6.rules.20260928_184953'
+
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated
+Rules updated
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated (v6)
+Firewall is active and enabled on system startup
+[2026-09-28 18:49:56] UFW rules configured.
+[2026-09-28 18:49:57] UFW programmatic verification passed.
+[2026-09-28 18:49:57] PHASE 5 complete
+[2026-09-28 18:49:57] PHASE 6: Configuring logrotate and persistent access
+[2026-09-28 18:49:57] Testing logrotate configuration.
+warning: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.
+
+reading config file /etc/logrotate.d/kijanikiosk
+Reading state from file: /var/lib/logrotate/status
+Allocating hash table for state file, size 64 entries
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+
+Handling 1 logs
+
+rotating pattern: /opt/kijanikiosk/shared/logs/*.log  after 1 days (7 rotations)
+empty log files are not rotated, old logs are removed
+switching euid from 0 to 995 and egid from 0 to 1001 (pid 27381)
+considering log /opt/kijanikiosk/shared/logs/kijanikiosk.log
+  Now: 2026-09-28 18:49
+  Last rotated at 2026-09-28 17:00
+  log does not need rotating (log has been rotated at 2026-09-28 17:00, which is less than a day ago)
+not running postrotate script, since no logs were rotated
+switching euid from 995 to 0 and egid from 1001 to 0 (pid 27381)
+[2026-09-28 18:49:57] Forcing log rotation.
+PASS: kk-api can write after logrotate
+[2026-09-28 18:49:57] Logrotate access persistence verified.
+[2026-09-28 18:49:57] PHASE 6 complete
+[2026-09-28 18:49:57] PHASE 7: Configuring persistent journald storage
+[2026-09-28 18:49:57] Persistent journal directory exists.
+[2026-09-28 18:49:57] Current journal disk usage:
+Archived and active journals take up 57.7M in the file system.
+[2026-09-28 18:49:57] PHASE 7 complete
+[2026-09-28 18:49:57] PHASE 8: Monitoring and final verification
+[2026-09-28 18:49:57] PASS: kk-api.service is active
+[2026-09-28 18:49:57] PASS: kk-payments.service is active
+[2026-09-28 18:49:57] PASS: kk-logs.service is active
+[2026-09-28 18:49:57] PASS: API health endpoint
+[2026-09-28 18:49:57] PASS: Payments health endpoint
+[2026-09-28 18:49:57] PASS: Logs health endpoint
+[2026-09-28 18:49:57] PASS: kk-api can write to shared logs
+[2026-09-28 18:49:57] PASS: Environment file readable: api.env
+[2026-09-28 18:49:57] PASS: Environment file readable: payments-api.env
+[2026-09-28 18:49:57] PASS: Environment file readable: logs.env
+[2026-09-28 18:49:58] PASS: UFW is active
+[2026-09-28 18:49:58] Security scores:
+[2026-09-28 18:49:58] kk-api: 2.7
+[2026-09-28 18:49:58] kk-payments: 1.1
+[2026-09-28 18:49:58] kk-logs: 2.7
+[2026-09-28 18:49:58] PASS: kk-api security score is below 3.5
+[2026-09-28 18:49:58] PASS: kk-payments security score is below 2.5
+[2026-09-28 18:49:58] PASS: kk-logs security score is below 3.5
+[2026-09-28 18:49:58] ===== PROVISIONING PASSED =====

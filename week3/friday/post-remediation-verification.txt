@@ -1,0 +1,82 @@
+===== KIJANIKIOSK POST-REMEDIATION VERIFICATION =====
+Date: Mon Sep 28 19:22:44 EAT 2026
+
+=== SERVICES ===
+active
+active
+active
+
+=== SECURITY SCORES ===
+→ Overall exposure level for kk-api.service: 2.7 OK 🙂
+→ Overall exposure level for kk-payments.service: 1.1 OK 🙂
+→ Overall exposure level for kk-logs.service: 2.7 OK 🙂
+
+=== HEALTH ENDPOINTS ===
+PASS: API
+PASS: Payments
+PASS: Logs
+
+=== LOG WRITE AFTER ROTATION ===
+PASS: kk-api can write after logrotate
+
+=== ACL ===
+# file: opt/kijanikiosk/shared/logs
+# owner: root
+# group: kijanikiosk
+# flags: -s-
+user::rwx
+user:kk-logs:rwx
+user:kk-payments:rwx
+user:kk-api:rwx
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:kk-logs:rwx
+default:user:kk-payments:rwx
+default:user:kk-api:rwx
+default:group::rwx
+default:group:kijanikiosk:rwx
+default:mask::rwx
+default:other::---
+
+
+=== FIREWALL ===
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] Anywhere on lo             ALLOW IN    Anywhere                   # Allow loopback traffic
+[ 2] 22/tcp                     ALLOW IN    10.0.1.0/24                # Allow SSH from internal network
+[ 3] 80/tcp                     ALLOW IN    10.0.1.0/24                # Allow HTTP from internal network
+[ 4] 3001/tcp                   ALLOW IN    10.0.1.0/24                # Allow payments health from internal network
+[ 5] 3001/tcp                   DENY IN     Anywhere                   # Deny external payments port
+[ 6] 3000/tcp                   DENY IN     Anywhere                   # Deny external API port
+[ 7] 3002/tcp                   DENY IN     Anywhere                   # Deny external logs port
+[ 8] Anywhere (v6) on lo        ALLOW IN    Anywhere (v6)              # Allow loopback traffic
+[ 9] 3001/tcp (v6)              DENY IN     Anywhere (v6)              # Deny external payments port
+[10] 3000/tcp (v6)              DENY IN     Anywhere (v6)              # Deny external API port
+[11] 3002/tcp (v6)              DENY IN     Anywhere (v6)              # Deny external logs port
+
+
+=== JOURNAL ===
+Archived and active journals take up 57.7M in the file system.
+
+=== HEALTH JSON ===
+{
+  "status": "PASS",
+  "timestamp": "2026-09-28T18:50:59+03:00",
+  "host": "DESKTOP-5R3D7HL",
+  "services": {
+    "kk-api": "active",
+    "kk-payments": "active",
+    "kk-logs": "active"
+  },
+  "security_scores": {
+    "kk-api": "2.7",
+    "kk-payments": "1.1",
+    "kk-logs": "2.7"
+  }
+}
+
+===== VERIFICATION COMPLETE =====
