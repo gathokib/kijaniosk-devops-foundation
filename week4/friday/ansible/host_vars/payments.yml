@@ -1,0 +1,7 @@
+---
+server_role: payments
+service_name: kk-payments
+service_user: kk-payments
+service_port: "{{ payments_port }}"
+environment_file: "{{ config_dir }}/payments-api.env"
+

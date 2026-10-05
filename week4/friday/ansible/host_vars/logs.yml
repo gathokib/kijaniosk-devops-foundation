@@ -1,0 +1,6 @@
+---
+server_role: logs
+service_name: kk-logs
+service_user: kk-logs
+service_port: 0
+environment_file: "{{ config_dir }}/logs.env"

@@ -1,0 +1,61 @@
+[Unit]
+Description=KijaniKiosk {{ server_role | capitalize }}
+After=network.target
+{% if server_role == "payments" %}
+After=kk-api.service
+Wants=kk-api.service
+{% endif %}
+
+[Service]
+Type=simple
+User={{ service_user }}
+Group={{ kijanikiosk_group }}
+EnvironmentFile={{ environment_file }}
+{% if server_role == "api" %}
+ExecStart=/usr/bin/python3 -m http.server {{ service_port }} --bind 127.0.0.1
+{% elif server_role == "payments" %}
+ExecStart=/usr/bin/python3 -m http.server {{ service_port }} --bind 127.0.0.1
+{% else %}
+ExecStart=/usr/bin/python3 -m http.server 3002 --bind 127.0.0.1
+{% endif %}
+Restart=on-failure
+RestartSec=5
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+{% if server_role == "payments" %}
+RestrictAddressFamilies=AF_INET AF_INET6
+{% else %}
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+{% endif %}
+RestrictNamespaces=true
+RemoveIPC=true
+SystemCallFilter=~@clock @debug @module @mount @raw-io @reboot @swap @privileged @resources @cpu-emulation @obsolete
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+UMask={% if server_role == "payments" %}0077{% else %}0027{% endif %}
+ProtectKernelLogs=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+ProcSubset=pid
+PrivateDevices=true
+PrivateUsers=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictRealtime=true
+{% if server_role == "payments" %}
+PrivateMounts=true
+{% endif %}
+
+ReadWritePaths={{ logs_dir }}
+
+[Install]
+WantedBy=multi-user.target

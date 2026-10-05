@@ -1,0 +1,212 @@
+---
+- name: Configure KijaniKiosk servers
+  hosts: kijanikiosk
+  become: true
+
+  tasks:
+
+    # PHASE 1 - Packages and service accounts
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - acl
+          - curl
+          - jq
+          - logrotate
+          - nginx
+          - ufw
+        state: present
+
+    - name: Create KijaniKiosk group
+      ansible.builtin.group:
+        name: "{{ kijanikiosk_group }}"
+        state: present
+
+    - name: Create service accounts
+      ansible.builtin.user:
+        name: "{{ item }}"
+        system: true
+        shell: /usr/sbin/nologin
+        groups: "{{ kijanikiosk_group }}"
+        append: true
+        state: present
+      loop: "{{ service_accounts }}"
+
+    # PHASE 2 - Directory structure
+
+    - name: Create KijaniKiosk directories
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - path: "{{ kijanikiosk_root }}"
+          owner: root
+          group: root
+          mode: "0755"
+        - path: "{{ config_dir }}"
+          owner: root
+          group: "{{ kijanikiosk_group }}"
+          mode: "0750"
+        - path: "{{ kijanikiosk_root }}/shared"
+          owner: root
+          group: "{{ kijanikiosk_group }}"
+          mode: "2770"
+        - path: "{{ logs_dir }}"
+          owner: root
+          group: "{{ kijanikiosk_group }}"
+          mode: "2770"
+        - path: "{{ health_dir }}"
+          owner: root
+          group: "{{ kijanikiosk_group }}"
+          mode: "2750"
+
+    # PHASE 3 - ACLs
+
+    - name: Grant service accounts config access
+      ansible.posix.acl:
+        path: "{{ config_dir }}"
+        entity: "{{ item }}"
+        etype: user
+        permissions: rx
+        state: present
+      loop: "{{ service_accounts }}"
+
+    - name: Grant service accounts log access
+      ansible.posix.acl:
+        path: "{{ logs_dir }}"
+        entity: "{{ item }}"
+        etype: user
+        permissions: rwx
+        state: present
+      loop: "{{ service_accounts }}"
+
+    - name: Grant service accounts health access
+      ansible.posix.acl:
+        path: "{{ health_dir }}"
+        entity: "{{ item }}"
+        etype: user
+        permissions: rx
+        state: present
+      loop: "{{ service_accounts }}"
+
+    - name: Configure default log ACL
+      ansible.posix.acl:
+        path: "{{ logs_dir }}"
+        entity: "{{ kijanikiosk_group }}"
+        etype: group
+        permissions: rwx
+        default: true
+        state: present
+
+    # PHASE 4 - Environment files
+
+    - name: Create environment file
+      ansible.builtin.template:
+        src: environment.env.j2
+        dest: "{{ environment_file }}"
+        owner: root
+        group: "{{ kijanikiosk_group }}"
+        mode: "0640"
+
+    # PHASE 5 - Systemd services
+
+    - name: Install KijaniKiosk systemd service
+      ansible.builtin.template:
+        src: kijanikiosk.service.j2
+        dest: "/etc/systemd/system/{{ service_name }}.service"
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Reload systemd
+        - Restart KijaniKiosk service
+
+    - name: Enable KijaniKiosk service
+      ansible.builtin.systemd:
+        name: "{{ service_name }}"
+        enabled: true
+        daemon_reload: true
+
+    # PHASE 6 - Firewall
+
+    - name: Set UFW default incoming policy
+      community.general.ufw:
+        default: deny
+        direction: incoming
+
+    - name: Set UFW default outgoing policy
+      community.general.ufw:
+        default: allow
+        direction: outgoing
+
+    - name: Allow SSH
+      community.general.ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+        proto: tcp
+
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+
+    # PHASE 7 - Journal persistence and logrotate
+
+        # PHASE 7 - Journal persistence and logrotate
+
+    - name: Create journald configuration directory
+      ansible.builtin.file:
+        path: /etc/systemd/journald.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Create persistent journal directory
+      ansible.builtin.file:
+        path: /var/log/journal
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Configure persistent journaling
+      ansible.builtin.template:
+        src: journald.conf.j2
+        dest: /etc/systemd/journald.conf.d/kijanikiosk.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart journald
+
+    - name: Configure logrotate
+      ansible.builtin.template:
+        src: kijanikiosk-logrotate.j2
+        dest: /etc/logrotate.d/kijanikiosk
+        owner: root
+        group: root
+        mode: "0644"
+
+  handlers:
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Restart KijaniKiosk service
+      ansible.builtin.systemd:
+        name: "{{ service_name }}"
+        state: restarted
+
+    - name: Restart journald
+      ansible.builtin.systemd:
+        name: systemd-journald
+        state: restarted

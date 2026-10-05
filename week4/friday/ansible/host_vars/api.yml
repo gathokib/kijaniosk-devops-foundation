@@ -1,0 +1,6 @@
+---
+server_role: api
+service_name: kk-api
+service_user: kk-api
+service_port: "{{ api_port }}"
+environment_file: "{{ config_dir }}/api.env"

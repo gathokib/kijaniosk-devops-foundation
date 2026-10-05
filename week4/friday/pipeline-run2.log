@@ -1,0 +1,200 @@
+=== KijaniKiosk IaC Pipeline ===
+Mode: multipass
+
+=== Terraform Apply ===
+[0m[1mmodule.app_server["payments"].terraform_data.server: Refreshing state... [id=785cb7a7-860d-375b-19f6-745330fe84f5][0m
+[0m[1mmodule.app_server["api"].terraform_data.server: Refreshing state... [id=b7b0deb2-e120-bb35-0a49-024421b3ae32][0m
+[0m[1mmodule.app_server["logs"].terraform_data.server: Refreshing state... [id=0907ea2c-7b1c-1d3d-8ef8-7344ba26f374][0m
+[0m[1mmodule.app_server["api"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["payments"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["logs"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["logs"].data.external.ip: Read complete after 1s [id=-][0m
+[0m[1mmodule.app_server["payments"].data.external.ip: Read complete after 1s [id=-][0m
+[0m[1mmodule.app_server["api"].data.external.ip: Read complete after 1s [id=-][0m
+
+[0m[1m[32mNo changes.[0m[1m Your infrastructure matches the configuration.[0m
+
+[0mTerraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+[0m[1m[32m
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.[0m
+[0m[1m[32m
+Outputs:
+
+[0mserver_ips = {
+  "api" = "10.50.121.98"
+  "logs" = "10.50.121.194"
+  "payments" = "10.50.121.16"
+}
+server_names = {
+  "api" = "kijanikiosk-api"
+  "logs" = "kijanikiosk-logs"
+  "payments" = "kijanikiosk-payments"
+}
+ssh_commands = {
+  "api" = "ssh ubuntu@10.50.121.98"
+  "logs" = "ssh ubuntu@10.50.121.194"
+  "payments" = "ssh ubuntu@10.50.121.16"
+}
+
+=== Reading Terraform Outputs ===
+API: 10.50.121.98
+Payments: 10.50.121.16
+Logs: 10.50.121.194
+
+=== Generating Ansible Inventory ===
+[kijanikiosk]
+api ansible_host=10.50.121.98
+payments ansible_host=10.50.121.16
+logs ansible_host=10.50.121.194
+
+[kijanikiosk:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/multipass_id_rsa
+ansible_python_interpreter=/usr/bin/python3
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+=== Running Ansible ===
+
+PLAY [Configure KijaniKiosk servers] *******************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [logs]
+ok: [api]
+ok: [payments]
+
+TASK [Update apt cache] ********************************************************
+ok: [payments]
+ok: [api]
+ok: [logs]
+
+TASK [Install required packages] ***********************************************
+ok: [logs]
+ok: [api]
+ok: [payments]
+
+TASK [Create KijaniKiosk group] ************************************************
+ok: [payments]
+ok: [logs]
+ok: [api]
+
+TASK [Create service accounts] *************************************************
+ok: [payments] => (item=kk-api)
+ok: [api] => (item=kk-api)
+ok: [logs] => (item=kk-api)
+ok: [api] => (item=kk-payments)
+ok: [payments] => (item=kk-payments)
+ok: [logs] => (item=kk-payments)
+ok: [logs] => (item=kk-logs)
+ok: [api] => (item=kk-logs)
+ok: [payments] => (item=kk-logs)
+
+TASK [Create KijaniKiosk directories] ******************************************
+ok: [payments] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'root', 'mode': '0755'})
+ok: [api] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'root', 'mode': '0755'})
+ok: [logs] => (item={'path': '/opt/kijanikiosk', 'owner': 'root', 'group': 'root', 'mode': '0755'})
+ok: [api] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+ok: [payments] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+ok: [logs] => (item={'path': '/opt/kijanikiosk/config', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '0750'})
+ok: [payments] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [api] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [logs] => (item={'path': '/opt/kijanikiosk/shared', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [payments] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [api] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [logs] => (item={'path': '/opt/kijanikiosk/shared/logs', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2770'})
+ok: [payments] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2750'})
+ok: [api] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2750'})
+ok: [logs] => (item={'path': '/opt/kijanikiosk/health', 'owner': 'root', 'group': 'kijanikiosk', 'mode': '2750'})
+
+TASK [Grant service accounts config access] ************************************
+[WARNING]: Deprecation warnings can be disabled by setting `deprecation_warnings=False` in ansible.cfg.
+[DEPRECATION WARNING]: Importing 'to_native' from 'ansible.module_utils._text' is deprecated. This feature will be removed from ansible-core version 2.24. Use ansible.module_utils.common.text.converters instead.
+ok: [payments] => (item=kk-api)
+ok: [api] => (item=kk-api)
+ok: [logs] => (item=kk-api)
+ok: [payments] => (item=kk-payments)
+ok: [logs] => (item=kk-payments)
+ok: [api] => (item=kk-payments)
+ok: [payments] => (item=kk-logs)
+ok: [api] => (item=kk-logs)
+ok: [logs] => (item=kk-logs)
+
+TASK [Grant service accounts log access] ***************************************
+ok: [payments] => (item=kk-api)
+ok: [api] => (item=kk-api)
+ok: [logs] => (item=kk-api)
+ok: [api] => (item=kk-payments)
+ok: [logs] => (item=kk-payments)
+ok: [payments] => (item=kk-payments)
+ok: [api] => (item=kk-logs)
+ok: [logs] => (item=kk-logs)
+ok: [payments] => (item=kk-logs)
+
+TASK [Grant service accounts health access] ************************************
+ok: [logs] => (item=kk-api)
+ok: [payments] => (item=kk-api)
+ok: [api] => (item=kk-api)
+ok: [payments] => (item=kk-payments)
+ok: [api] => (item=kk-payments)
+ok: [logs] => (item=kk-payments)
+ok: [payments] => (item=kk-logs)
+ok: [api] => (item=kk-logs)
+ok: [logs] => (item=kk-logs)
+
+TASK [Configure default log ACL] ***********************************************
+ok: [payments]
+ok: [api]
+ok: [logs]
+
+TASK [Create environment file] *************************************************
+ok: [logs]
+ok: [api]
+ok: [payments]
+
+TASK [Install KijaniKiosk systemd service] *************************************
+ok: [api]
+ok: [payments]
+ok: [logs]
+
+TASK [Enable KijaniKiosk service] **********************************************
+ok: [api]
+ok: [payments]
+ok: [logs]
+
+TASK [Set UFW default incoming policy] *****************************************
+ok: [logs]
+ok: [payments]
+ok: [api]
+
+TASK [Set UFW default outgoing policy] *****************************************
+ok: [logs]
+ok: [payments]
+ok: [api]
+
+TASK [Allow SSH] ***************************************************************
+ok: [api]
+ok: [logs]
+ok: [payments]
+
+TASK [Enable UFW] **************************************************************
+ok: [logs]
+ok: [payments]
+ok: [api]
+
+TASK [Create persistent journal directory] *************************************
+ok: [logs]
+ok: [api]
+ok: [payments]
+
+TASK [Configure logrotate] *****************************************************
+ok: [api]
+ok: [payments]
+ok: [logs]
+
+PLAY RECAP *********************************************************************
+api                        : ok=19   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+logs                       : ok=19   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+payments                   : ok=19   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+
+=== Pipeline completed successfully ===
