@@ -1,0 +1,123 @@
+[0m[1mmodule.app_server["logs"].terraform_data.server: Refreshing state... [id=0907ea2c-7b1c-1d3d-8ef8-7344ba26f374][0m
+[0m[1mmodule.app_server["payments"].terraform_data.server: Refreshing state... [id=785cb7a7-860d-375b-19f6-745330fe84f5][0m
+[0m[1mmodule.app_server["api"].terraform_data.server: Refreshing state... [id=b7b0deb2-e120-bb35-0a49-024421b3ae32][0m
+[0m[1mmodule.app_server["logs"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["api"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["payments"].data.external.ip: Reading...[0m[0m
+[0m[1mmodule.app_server["payments"].data.external.ip: Read complete after 5s [id=-][0m
+[0m[1mmodule.app_server["api"].data.external.ip: Read complete after 5s [id=-][0m
+[0m[1mmodule.app_server["logs"].data.external.ip: Read complete after 5s [id=-][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # module.app_server["api"].terraform_data.server[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "terraform_data" "server" {
+      [31m-[0m[0m id     = "b7b0deb2-e120-bb35-0a49-024421b3ae32" [90m-> null[0m[0m
+      [31m-[0m[0m input  = {
+          [31m-[0m[0m cpus          = 2
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "2G"
+          [31m-[0m[0m name          = "kijanikiosk-api"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m output = {
+          [31m-[0m[0m cpus          = 2
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "2G"
+          [31m-[0m[0m name          = "kijanikiosk-api"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+    }
+
+[1m  # module.app_server["logs"].terraform_data.server[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "terraform_data" "server" {
+      [31m-[0m[0m id     = "0907ea2c-7b1c-1d3d-8ef8-7344ba26f374" [90m-> null[0m[0m
+      [31m-[0m[0m input  = {
+          [31m-[0m[0m cpus          = 1
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "1G"
+          [31m-[0m[0m name          = "kijanikiosk-logs"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m output = {
+          [31m-[0m[0m cpus          = 1
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "1G"
+          [31m-[0m[0m name          = "kijanikiosk-logs"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+    }
+
+[1m  # module.app_server["payments"].terraform_data.server[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "terraform_data" "server" {
+      [31m-[0m[0m id     = "785cb7a7-860d-375b-19f6-745330fe84f5" [90m-> null[0m[0m
+      [31m-[0m[0m input  = {
+          [31m-[0m[0m cpus          = 2
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "2G"
+          [31m-[0m[0m name          = "kijanikiosk-payments"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m output = {
+          [31m-[0m[0m cpus          = 2
+          [31m-[0m[0m disk          = "10G"
+          [31m-[0m[0m image         = "22.04"
+          [31m-[0m[0m instance_type = "standard"
+          [31m-[0m[0m key_name      = "kijanikiosk"
+          [31m-[0m[0m memory        = "2G"
+          [31m-[0m[0m name          = "kijanikiosk-payments"
+          [31m-[0m[0m region        = "local"
+        } [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m [0m0 to add, 0 to change, 3 to destroy.
+
+Changes to Outputs:
+  [31m-[0m[0m server_ips   = {
+      [31m-[0m[0m api      = "10.50.121.98"
+      [31m-[0m[0m logs     = "10.50.121.194"
+      [31m-[0m[0m payments = "10.50.121.16"
+    } [90m-> null[0m[0m
+  [31m-[0m[0m server_names = {
+      [31m-[0m[0m api      = "kijanikiosk-api"
+      [31m-[0m[0m logs     = "kijanikiosk-logs"
+      [31m-[0m[0m payments = "kijanikiosk-payments"
+    } [90m-> null[0m[0m
+  [31m-[0m[0m ssh_commands = {
+      [31m-[0m[0m api      = "ssh ubuntu@10.50.121.98"
+      [31m-[0m[0m logs     = "ssh ubuntu@10.50.121.194"
+      [31m-[0m[0m payments = "ssh ubuntu@10.50.121.16"
+    } [90m-> null[0m[0m
+[0m[1mmodule.app_server["logs"].terraform_data.server: Destroying... [id=0907ea2c-7b1c-1d3d-8ef8-7344ba26f374][0m[0m
+[0m[1mmodule.app_server["api"].terraform_data.server: Destroying... [id=b7b0deb2-e120-bb35-0a49-024421b3ae32][0m[0m
+[0m[1mmodule.app_server["payments"].terraform_data.server: Destroying... [id=785cb7a7-860d-375b-19f6-745330fe84f5][0m[0m
+[0m[1mmodule.app_server["payments"].terraform_data.server: Provisioning with 'local-exec'...[0m[0m
+[0m[1mmodule.app_server["logs"].terraform_data.server: Provisioning with 'local-exec'...[0m[0m
+[0m[1mmodule.app_server["api"].terraform_data.server: Provisioning with 'local-exec'...[0m[0m
+[0m[1mmodule.app_server["logs"].terraform_data.server (local-exec):[0m [0mExecuting: ["/bin/sh" "-c" "multipass delete kijanikiosk-logs --purge"]
+[0m[1mmodule.app_server["api"].terraform_data.server (local-exec):[0m [0mExecuting: ["/bin/sh" "-c" "multipass delete kijanikiosk-api --purge"]
+[0m[1mmodule.app_server["payments"].terraform_data.server (local-exec):[0m [0mExecuting: ["/bin/sh" "-c" "multipass delete kijanikiosk-payments --purge"]
+[0m[1mmodule.app_server["logs"].terraform_data.server: Destruction complete after 2s[0m
+[0m[1mmodule.app_server["payments"].terraform_data.server: Destruction complete after 2s[0m
+[0m[1mmodule.app_server["api"].terraform_data.server: Destruction complete after 3s[0m
+[0m[1m[32m
+Destroy complete! Resources: 3 destroyed.[0m
